@@ -46,7 +46,7 @@ Ahora ponemos en marcha la herramienta. Probamos la potencia del nginx:
 
 Y ahora el haproxy:
 
-![](benchmarkHaproxy 100.png "Alta carga para el balanceador haproxy")
+![](benchmarkHaproxy100.png "Alta carga para el balanceador haproxy")
 
 Las pruebas se han hecho para 100000 peticiones, pedidas concurrentemente de 100 en 100, números más que suficientes para resentir al servidor. Como se puede comprobar por las imágenes, el balanceador que da mejores prestaciones en mi caso es el haproxy. Esto se puede ver en que aunque los dos no han fallado en ninguna petición, haproxy tiene una tasa de peticiones contestadas por segundo más de un 50% más alto que nginx.
 
