@@ -6,7 +6,7 @@ Lo primero es crear una nueva máquina virtual para el balanceo de carga, sin in
 
 Lo instalamos con las árdenes dadas. Actualizamos el contenido del archivo /etc/nginx/conf.d/default.conf al que se nos indica en la práctica, pero aplicado a mi caso:
 
-![](contenido conf.d round-robin.png "Fichero '/etc/nginx/conf.d/default.conf' en el balanceador para Round-Robin")
+![](contenidoConfdRoundrobin.png "Fichero '/etc/nginx/conf.d/default.conf' en el balanceador para Round-Robin")
 
 Sin embargo no funcionaba, pero al comentar la lánea: **include /etc/nginx/sites-enabled/***; del archivo */etc/nginx/nginx.conf* ya sá podrá acceder a las páginas de los otros dos servidores.
 
@@ -14,13 +14,13 @@ Para hacer la prueba de funcionalidad, tuve que comentar en el crontab del servi
 
 He aquí la prueba de que funciona correctamente el balanceador de carga:
 
-![](comprobacion nginx round-robin.png "Comprobación del balanceador de carga nginx para Round-Robin")
+![](comprobacionNginxRoundrobin.png "Comprobación del balanceador de carga nginx para Round-Robin")
 
 Ahora probamos con otro algoritmo de elección, el de pesos. Para ello, le damos un peso de 2 al servidor 1 y un peso de 1 al servidor 2, de esta forma el servidor 1 debería tener el doble de peticiones que el 2. He aquí la prueba:
 
-![](contenido conf.d pesos.png "Fichero '/etc/nginx/conf.d/default.conf' en el balanceador para los pesos")
+![](contenidoConfdPesos.png "Fichero '/etc/nginx/conf.d/default.conf' en el balanceador para los pesos")
 
-![](comprobacion nginx pesos.png "Comprobacián del balanceador de carga nginx para pesos")
+![](comprobacionNginxPesos.png "Comprobacián del balanceador de carga nginx para pesos")
 
 En cuanto a las diferentes opciones de configuración que se indican ( ip_hash, keepalive, ...), les he echado un vistazo, las he probado a aplicar y reiniciar el servicio y funciona, aunque el ver el cómo de algunas con las máquinas montadas no ha sido posible.
 
@@ -30,11 +30,11 @@ Como las máquinas tienen las mismas prestaciones, dejo Round-Robin activo final
 
 Instalamos el servicio y configuramos el archivo **/etc/haproxy/haproxy.cfg** como indica el guión:
 
-![](contenido haproxy.png "Fichero '/etc/haproxy/haproxy.cfg' en el balanceador")
+![](contenidoHaproxy.png "Fichero '/etc/haproxy/haproxy.cfg' en el balanceador")
 
 Paramos el servicio de nginx, echamos a andar el de haproxy (si no hemos parado antes el nginx nos saldrá un ALERT diciendo que no puede apropiarse del puerto, por lo que no se activa) y comprobamos que el servicio está funcionando correctamente:
 
-![](comprobacion haproxy.png "Comprobación del balanceador de carga haproxy")
+![](comprobacionHaproxy.png "Comprobación del balanceador de carga haproxy")
 
 ### Someter a una alta carga el servidor balanceado
 
@@ -42,11 +42,11 @@ Lo primero es instalar en una máquina externa la herramienta Apache Benchmark. 
 
 Ahora ponemos en marcha la herramienta. Probamos la potencia del nginx:
 
-![](benchmark nginx.png "Alta carga para el balanceador nginx")
+![](benchmarkNginx.png "Alta carga para el balanceador nginx")
 
 Y ahora el haproxy:
 
-![](benchmark haproxy 100.png "Alta carga para el balanceador haproxy")
+![](benchmarkHaproxy 100.png "Alta carga para el balanceador haproxy")
 
 Las pruebas se han hecho para 100000 peticiones, pedidas concurrentemente de 100 en 100, números más que suficientes para resentir al servidor. Como se puede comprobar por las imágenes, el balanceador que da mejores prestaciones en mi caso es el haproxy. Esto se puede ver en que aunque los dos no han fallado en ninguna petición, haproxy tiene una tasa de peticiones contestadas por segundo más de un 50% más alto que nginx.
 
